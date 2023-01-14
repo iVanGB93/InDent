@@ -24,11 +24,17 @@ class Day(models.Model):
 
 class Appointment(models.Model):
     day = models.ForeignKey(Day, on_delete=models.CASCADE)
+    time = models.TimeField()
+    duration = models.IntegerField(default=15)
     provider = models.ForeignKey(User, on_delete=models.CASCADE, related_name='provider')
     patient = models.ForeignKey(User, on_delete=models.CASCADE, related_name='patient')
     topic = models.CharField(max_length=100)
     comment = models.CharField(max_length=200)
-    date = models.DateTimeField(default=datetime.datetime.now())
+    confirmed = models.BooleanField(default=False)
+    arrived = models.BooleanField(default=False)
+    chair = models.BooleanField(default=False)
+    finished = models.BooleanField(default=False)
+    canceled = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.date.strftime("%A %d. %B %Y") + ' ' + self.patient.username + ' ' + self.topic
+        return str(self.day.month.year.year) + '/' + str(self.day.month.month) + '/' + str(self.day.day) + ' (' + str(self.time) + '): ' + self.patient.username + ' ' + self.topic
